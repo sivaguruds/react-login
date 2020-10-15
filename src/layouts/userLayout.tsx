@@ -1,13 +1,13 @@
 import React from 'react';
+import { useHistory } from "react-router-dom";
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import SettingsPowerIcon from '@material-ui/icons/SettingsPower';
+import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -26,6 +26,9 @@ const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
+  },
+  title: {
+    flexGrow: 1,
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
@@ -58,6 +61,7 @@ const useStyles = makeStyles(theme => ({
 
 const ResponsiveDrawer = (props: any) => {
   const classes = useStyles();
+  let history = useHistory();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -70,6 +74,19 @@ const ResponsiveDrawer = (props: any) => {
     drawer = <GravityMenu/>
   } else if(values.menuName === 'OA'){
     drawer = <HospitalMenu/>
+  }
+
+  const pageChange =() => {
+    let path = "/";
+    history.push(path);
+  }
+
+  const logOut = () => {
+    localStorage.removeItem("user_type");
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("user_info");
+    localStorage.removeItem("user_id");
+    pageChange()
   }
 
   
@@ -91,9 +108,12 @@ const ResponsiveDrawer = (props: any) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Responsive drawer
           </Typography>
+          <IconButton onClick={logOut} color="inherit">
+              <SettingsPowerIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       
